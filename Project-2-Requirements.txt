@@ -1,0 +1,32 @@
+# Project 2 Requirements
+
+You must have the following:
+
+## Must-Have Non-Technical Requirements
+
+- Tasks set up and delegated in either Trello or Github Projects
+- Daily communication with your group
+- A github commit history adequately reflecting the size of the project, the work of each group member with descriptive commit messages
+- A polished github readme
+- An approved project proposal
+
+## Must-Have Technical Requirements
+
+- Use a Node and Express Web Server;
+- Be backed by a MySQL Database an ORM (not necessarily Sequelize);
+- Have both GET and POST routes for retrieving and adding new data;
+- Be deployed using Heroku (with Data);
+- Utilize at least one new library, package, or technology that we haven't discussed;
+- Have a polished frontend / UI;
+- Have folder structure that meets MVC Paradigm;
+- Meet good quality coding standards (indentation, scoping, naming, comments).
+- Pass W3C Validation for CSS, HTML and JSHint Validation for JavaScript
+
+
+## Should-Have Technical Requirements
+
+- Incorporate Basic Testing Framework, see Project Suggestions;
+- Use Handlebars for Server-Side Templating
+- Incorporate Authentication (JSON Web Tokens, Sessions, Etc.)
+- Use an existing public dataset to power the database
+- Create a migration strategy for sharing data across team members.
