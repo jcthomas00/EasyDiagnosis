@@ -1,12 +1,18 @@
 drop database if exists diagnoser;
+create database diagnoser;
 use diagnoser;
 create table trending(
-id integer auto_increment not null,
-sym_name varchar (255),
-primary key (id));
+id varchar (255) not null,
+sym_name varchar (255));
 
-select from sym_name from trending 
-where count(id) as "instances" 
+insert into trending(
+id, sym_name)
+values 
+("s101", "sneezing"),
+("s101", "sneezing"),
+("s102", "coughing");
+
+select sym_name, count(id) from trending   
 group by sym_name
-order by "instances" desc
-limit 1;
+order by count(id) desc
+limit 2;
