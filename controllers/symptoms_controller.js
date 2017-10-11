@@ -14,6 +14,7 @@ router.post('/', function(req, res) {
 	getSymptoms(req.body.spokenSymptoms, (body)=>{
 		symps = JSON.parse(body).mentions;
 		getDiagnosis(symps, (body)=>{
+			console.log(body);
 			let firstDiagnosis = JSON.parse(body).conditions[0];
 			res.render('index', {
 				probability: Math.round(firstDiagnosis.probability*100), 
