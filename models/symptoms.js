@@ -1,6 +1,6 @@
-var orm = require('../config/orm.js');
+var orm; //= require('../config/orm.js');
 
-var burger = {
+var symptoms = {
 	all: function(cb) {
 		orm.all('burger', function(res){
 			cb(res);
