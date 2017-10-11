@@ -216,6 +216,11 @@ progress, progress[role] {
         <a class="btn btn-floating pink darken-4 btn-large pulse"><i class="material-icons">mic</i></a> 
         </h2>
         <h4 class="light red-text text-darken-4 center-on-small-only">Just tell us your symptoms and we will provide you with information to get you feeling good again.</h4>
+        <form action="/" method="POST">
+          <input type="text" class="grey-text" name="spokenSymptoms" placeholder="Enter your symptoms here" />
+          <input type="submit" value="Get Diagnosis" class="btn" />
+        </form>
+        {{{ body }}}
       </div>
 
     </div>
