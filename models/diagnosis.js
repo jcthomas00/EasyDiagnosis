@@ -1,8 +1,8 @@
 var Sequelize = require('sequelize');
 var model = require('../config/connection.js');
-var requests = model.define('symptoms', {
-	searchText: {
+var diagnosis = model.define('symptoms', {
+	diagnosis_id: {
         type: Sequelize.STRING,
     }
 });
-module.exports = requests;
+module.exports = diagnosis;
