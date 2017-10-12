@@ -1,6 +1,6 @@
 use diagnoser;
 create table user(
-id integer auto_increment not null,
+user_id integer auto_increment not null,
 email varchar (255) not null,
 password varchar (255) not null,
 name varchar (255) not null,
