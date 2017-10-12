@@ -1,0 +1,21 @@
+Users
+-uid
+-email
+-phone
+-gender
+-age
+-password
+
+Requests
+-queryID
+-uid = foreign key
+-search_text
+
+Symptoms
+-queryID = foreign key
+-symptomID
+
+Diagnosis
+-diagnosisID
+-queryID = foreign key
+-symptomID

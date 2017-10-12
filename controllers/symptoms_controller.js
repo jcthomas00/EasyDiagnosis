@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var symptoms = require('../models/symptoms.js');
+//var symptoms = require('../models/symptoms.js');
 var request = require("request");
 
 //show index page
@@ -14,7 +14,6 @@ router.post('/', function(req, res) {
 	getSymptoms(req.body.spokenSymptoms, (body)=>{
 		symps = JSON.parse(body).mentions;
 		getDiagnosis(symps, (body)=>{
-			console.log(body);
 			let firstDiagnosis = JSON.parse(body).conditions[0];
 			res.render('index', {
 				probability: Math.round(firstDiagnosis.probability*100), 
@@ -26,6 +25,8 @@ router.post('/', function(req, res) {
 
 //function to get diagnosis based on an array of symptoms
 var getDiagnosis = (symptoms, cbFunc, gender="male", old=30)=>{
+			console.log(symptoms);
+
 	var symp = [];
 	for (symptom of symptoms){
 		symp.push({ id: symptom.id, choice_id: symptom.choice_id });
@@ -34,8 +35,8 @@ var getDiagnosis = (symptoms, cbFunc, gender="male", old=30)=>{
 		url		: "https://api.infermedica.com/v2/diagnosis",
 		method	: "POST",
 		headers	: {
-			"app-id"		: "de7ec279",
-			"app-key"		: "05e5b6142f5e332375904a0a7e4b6865",
+			"app-id"		: process.env.APP_ID,
+			"app-key"		: process.env.APP_KEY,
 			"content-type"	: "application/json"
 		},
 		body: 	JSON.stringify({
@@ -59,8 +60,8 @@ var getSymptoms = (text, cbFunc)=>{
 		url		: 	"https://api.infermedica.com/v2/parse",
 		method	: 	"POST",
 		headers	: 	{
-						"app-id"		: "de7ec279",
-						"app-key"		: "05e5b6142f5e332375904a0a7e4b6865",
+						"app-id"		: process.env.APP_ID,
+						"app-key"		: process.env.APP_KEY,
 						"content-type"	: "application/json"
 					},
 		body: 	JSON.stringify({text : text })
