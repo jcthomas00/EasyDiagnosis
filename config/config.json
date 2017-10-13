@@ -1,9 +1,9 @@
 {
   "development": {
     "username": "root",
-    "password": "an538811",
+    "password": "madonna",
     "database": "diagnoser",
-    "host": "127.0.0.1",
+    "host": "localhost",
     "dialect": "mysql"
   },
   "test": {

@@ -1,12 +1,20 @@
 //get dependencies
-var express = require("express");
-var bodyParser = require("body-parser");
-var methodOverride = require("method-override");
-var app = express();
+var express 		= require("express"),
+	bodyParser 		= require("body-parser"),
+	methodOverride 	= require("method-override"),
+	app 			= express(),
+	session 		= require("express-session"),
+	passport 		= require("./config/passport");
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
 }
+
+
+// We need to use sessions to keep track of our user's login status
+app.use(session({ secret: "keyboard cat", resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 //get heroku port is available
 var port = process.env.PORT  || 3000;

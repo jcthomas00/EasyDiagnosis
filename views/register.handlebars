@@ -1,0 +1,51 @@
+<div class="row">
+    <form class="col s12" action="/new_user" method="post">
+      <div class="row">
+        <div class="input-field col s6">
+          <input placeholder="First Name" name="first_name" type="text" class="validate">
+          <label for="first_name">First Name</label>
+        </div>
+        <div class="input-field col s6">
+          <input name="last_name" type="text" class="validate">
+          <label for="last_name">Last Name</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <input value="age" name="age" type="number" class="validate">
+          <label for="disabled">Age</label>
+        </div>
+        <div class="input-field col s6">
+          <select name="gender">
+            <option value="" disabled selected>Select Your Gender</option>
+            <option value="1">Male</option>
+            <option value="2">Female</option>
+          </select>
+          <label>Gender</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input name="email" type="email" class="validate">
+          <label for="email">Email</label>
+        </div>
+       </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input name="phone" type="tel" class="validate">
+          <label for="phone">Phone</label>
+        </div>
+       </div>
+       <div class="row">
+        <div class="input-field col s12">
+          <input name="password" type="password" class="validate">
+          <label for="password">Password</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+            <input type="submit" value="Submit" class="btn">
+        </div>
+      </div>
+    </form>
+  </div>
