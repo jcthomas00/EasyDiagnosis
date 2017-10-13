@@ -13,7 +13,12 @@
 		  <input type="text" class="grey-text" name="spokenSymptoms" placeholder="Enter your symptoms here" />
 		  <input type="submit" value="Get Diagnosis" class="btn" />
 		</form>
-		{{#if probability}}
+    {{#if noSymp}}
+      <p class="black-text">
+        Sorry, we didn't get that. Please try again.
+      </p>
+    {{/if}}
+    {{#if probability}}
 			<p class="black-text">
 				Based on your input there is a {{ probability }} percent chance that you have {{ diagnosis }}
 			</p>

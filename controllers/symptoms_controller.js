@@ -4,7 +4,7 @@ var express 		= require('express'),
 	request 		= require("request"),
 	passport 		= require("../config/passport"),
 	isAuthenticated = require("../config/middleware/isAuthenticated"),
-	current_user_id = 0;
+	current_user_id = 1;
 
 //show index page
 router.get('/', function(req, res) {
@@ -41,7 +41,8 @@ router.get("/login", function(req, res) {
 });
 
 //do login logic
-router.post("/login", passport.authenticate("local"), function(req, res) {
+router.post("/login", passport.authenticate("local", 
+	{ successRedirect: '/member', failureRedirect: '/login' }), function(req, res) {
     res.render("member");
 });
 
@@ -53,16 +54,32 @@ router.post("/login", passport.authenticate("local"), function(req, res) {
 
 //show dignosis based on entered text
 router.post('/', function(req, res) {
-	var symps=[];
+	let symps 	= [], 
+		reqData	= {
+			user_id : (req.user ? req.user[0].user_id : 1), 
+			text 	: req.body.spokenSymptoms
+		};
+	diagnoser.addRequest(reqData, (response)=>{
+		reqData.request_id = response;
+	});
 	getSymptoms(req.body.spokenSymptoms, (body)=>{
 		symps = JSON.parse(body).mentions;
-		getDiagnosis(symps, (body)=>{
-			let firstDiagnosis = JSON.parse(body).conditions[0];
-			res.render('index', {
-				probability: Math.round(firstDiagnosis.probability*100), 
-				diagnosis: firstDiagnosis.common_name
-			});	//res.render
-		});		//getDiagnosis
+		if (symps.length > 0){
+			reqData.symptoms = symps;
+			diagnoser.addSymptoms(reqData);			
+			getDiagnosis(symps, (body)=>{
+					let firstDiagnosis = JSON.parse(body).conditions[0];
+					reqData.condition_id = firstDiagnosis.id;
+					diagnoser.addDiagnosis(reqData);			
+
+					res.render('index', {
+						probability: Math.round(firstDiagnosis.probability*100), 
+						diagnosis: firstDiagnosis.common_name
+					});	//res.render
+			});		//getDiagnosis
+		} else {
+			res.render('index', {noSymp : true});
+		}	
 	});			//getSymptoms
 });				//post
 

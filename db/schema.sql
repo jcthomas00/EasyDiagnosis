@@ -7,19 +7,19 @@ user_id integer auto_increment not null,
 email varchar (255) not null,
 password varchar (255) not null,
 name varchar (255) not null,
-phone integer (9),
-gender varchar (1),
-age integer ,
+phone varchar(20),
+gender varchar (20),
+age integer,
 primary key (user_id)
 );
 
 create table requests(
 request_id integer auto_increment not null,
-time DATETIME Not Null,
-fk_user_id integer ,
+time integer Not Null,
+fk_user_id integer,
 search_text varchar (255),
 primary key (request_id),
-foreign key (fk_user_id) references user(user_id)
+foreign key (fk_user_id) references users(user_id)
 );
 
 create table symptoms(
@@ -37,3 +37,7 @@ condition_id varchar (255),
 primary key (diagnosis_id),
 foreign key (fk_request_id) references requests(request_id)
 );
+
+select * from users;
+select * from symptoms;
+select * from requests;
