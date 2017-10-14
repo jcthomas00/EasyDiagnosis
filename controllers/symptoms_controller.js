@@ -8,7 +8,12 @@ var express 		= require('express'),
 
 //show index page
 router.get('/', function(req, res) {
+	if (req.user) {
+		console.log(req.user)
+		res.render('index', {age : req.user.age, gender : req.user.gender});
+	}else{
 		res.render('index', "");
+	}
 });
 
 //show new user page
@@ -36,8 +41,9 @@ router.get("/login", function(req, res) {
 	// If the user already has an account send them to the members page
 	if (req.user) {
 	  res.redirect("/member");
+	}else{
+		res.render("login");
 	}
-	res.render("login");
 });
 
 //do login logic
@@ -67,7 +73,7 @@ router.post('/', function(req, res) {
 		if (symps.length > 0){
 			reqData.symptoms = symps;
 			diagnoser.addSymptoms(reqData);			
-			getDiagnosis(symps, (body)=>{
+			getDiagnosis(symps, req.body.gender, parseInt(req.body.age), (body)=>{
 					let firstDiagnosis = JSON.parse(body).conditions[0];
 					reqData.condition_id = firstDiagnosis.id;
 					diagnoser.addDiagnosis(reqData);			
@@ -84,8 +90,7 @@ router.post('/', function(req, res) {
 });				//post
 
 //function to get diagnosis based on an array of symptoms
-var getDiagnosis = (symptoms, cbFunc, gender="male", old=30)=>{
-			console.log(symptoms);
+var getDiagnosis = (symptoms, gender="male", old=30, cbFunc)=>{
 
 	var symp = [];
 	for (symptom of symptoms){

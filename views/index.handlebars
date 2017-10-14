@@ -11,17 +11,18 @@
 		</h4>
 		<form action="/" method="POST">
         <div class="input-field col s6">
-          <select name="gender">
-            <option value="1" selected>Male</option>
-            <option value="2">Female</option>
+          <select class="black-text"  name="gender">
+            <option value="male" selected>Male</option>
+            <option value="female">Female</option>
           </select>
           <label>Gender</label>
         </div>
         <div class="input-field col s6">
           <label for="age">Age</label>
-          <input id="age" name="age" type="number" value="30" min="0" max="100" />
+          <input required="true" class="black-text" id="age" name="age" type="number" 
+          value="30" min="0" max="100" />
         </div>
-		  <input type="text" class="grey-text" name="spokenSymptoms" placeholder="Enter your symptoms here" />
+		  <input type="text" class="black-text" name="spokenSymptoms" placeholder="Enter your symptoms here" required="true" />
 		  <input type="submit" value="Get Diagnosis" class="btn" />
 		</form>
     {{#if noSymp}}
@@ -166,7 +167,13 @@
   <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
   <script src="js/main.js"></script>
   <script src="../../../js/lib/ga.js"></script>
-
+<script type="text/javascript">
+  $(document).ready(function(){
+    // Activate the side menu 
+    $(".button-collapse").sideNav();
+    $('select').material_select();
+  });  
+</script> 
 
 
 

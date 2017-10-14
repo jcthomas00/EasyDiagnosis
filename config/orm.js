@@ -4,7 +4,7 @@ var orm = {
 	getAllSymptoms : function(cbFunc){
 		let sql = "SELECT * FROM symptoms";
 		connection.query(sql, cbFunc, (err, res)=>{
-			console.log(res);
+//			console.log(res);
 			cbFunc(res);
 		});
 	},
@@ -62,7 +62,7 @@ var orm = {
 					console.log(err);
 					throw(err);
 				}else{
-					console.log(`Iserted ${symptom} into symptoms`);
+//					console.log(`Iserted ${symptom} into symptoms`);
 				}
 			});
 		}
@@ -74,7 +74,7 @@ var orm = {
 				console.log(err);
 				throw(err);
 			}else{
-				console.log(`Iserted ${requestData.condition_id} into diagnosis`);
+//				console.log(`Iserted ${requestData.condition_id} into diagnosis`);
 			}
 		});
 	}
