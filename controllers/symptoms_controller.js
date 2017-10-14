@@ -11,15 +11,19 @@ router.get('/', function(req, res) {
 	if (req.user) {
 		console.log(req.user[0].age)
 		let userFemale = (req.user[0].gender === "female") ? true : false;
-		res.render('index', {userAge : req.user[0].age, userFemale : userFemale});
+		res.render('index', {userAge : req.user[0].age, userFemale : userFemale, loggedIn:true});
 	}else{
-		res.render('index', "");
+		res.render('index');
 	}
 });
 
 //show new user page
 router.get('/register', function(req, res) {
-		res.render('register');
+	if (req.user) {
+		res.render('register', {loggedIn:true});
+	} else {
+		res.render('register', {loggedIn:false});
+	}
 });
 
 //create new user
@@ -34,7 +38,7 @@ router.post('/register', function(req, res) {
 	}
 	diagnoser.addUser(userData, (newlyCreatedId)=>{
 		current_user_id = newlyCreatedId;
-		res.render('login')
+		res.render('login', {loggedIn:false})
 	});
 });
 
@@ -42,9 +46,9 @@ router.post('/register', function(req, res) {
 router.get("/login", function(req, res) {
 	// If the user already has an account send them to the members page
 	if (req.user) {
-	  res.redirect("/member");
+	  res.redirect("/member", {loggedIn:true});
 	}else{
-		res.render("login");
+		res.render("login", {loggedIn:false});
 	}
 });
 
@@ -57,13 +61,13 @@ router.get("/logout", function(req, res) {
 //do login logic
 router.post("/login", passport.authenticate("local", 
 	{ successRedirect: '/member', failureRedirect: '/login' }), function(req, res) {
-    res.render("member");
+    res.render("member", {loggedIn:true});
 });
 
   // Here we've add our isAuthenticated middleware to this route.
   // If a user who is not logged in tries to access this route they will be redirected to the signup page
   router.get("/member", isAuthenticated, function(req, res) {
-    res.render("member");
+    res.render("member", {loggedIn:true});
   });
 
 //show dignosis based on entered text
