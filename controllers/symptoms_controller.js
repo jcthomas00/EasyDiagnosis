@@ -48,6 +48,12 @@ router.get("/login", function(req, res) {
 	}
 });
 
+//logout user
+router.get("/logout", function(req, res) {
+    req.logout();
+    res.redirect("/");
+});
+
 //do login logic
 router.post("/login", passport.authenticate("local", 
 	{ successRedirect: '/member', failureRedirect: '/login' }), function(req, res) {
