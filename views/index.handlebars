@@ -12,15 +12,20 @@
 		<form action="/" method="POST">
         <div class="input-field col s6">
           <select class="black-text"  name="gender">
-            <option value="male" selected>Male</option>
-            <option value="female">Female</option>
+            <option value="male" >Male</option>
+            <option value="female" {{#if userFemale}}selected{{/if}}>Female</option>
           </select>
           <label>Gender</label>
         </div>
         <div class="input-field col s6">
           <label for="age">Age</label>
-          <input required="true" class="black-text" id="age" name="age" type="number" 
-          value="30" min="0" max="100" />
+          {{#if userAge}}
+            <input required="true" class="black-text" id="age" name="age" type="number" value="{{userAge}}" min="0" max="100" />            
+            {{else}}
+            <input required="true" class="black-text" id="age" name="age" type="number" value="30" min="0" max="100" />
+          {{/if}}
+
+            
         </div>
 		  <input type="text" class="black-text" name="spokenSymptoms" placeholder="Enter your symptoms here" required="true" />
 		  <input type="submit" value="Get Diagnosis" class="btn" />

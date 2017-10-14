@@ -9,8 +9,9 @@ var express 		= require('express'),
 //show index page
 router.get('/', function(req, res) {
 	if (req.user) {
-		console.log(req.user)
-		res.render('index', {age : req.user.age, gender : req.user.gender});
+		console.log(req.user[0].age)
+		let userFemale = (req.user[0].gender === "female") ? true : false;
+		res.render('index', {userAge : req.user[0].age, userFemale : userFemale});
 	}else{
 		res.render('index', "");
 	}

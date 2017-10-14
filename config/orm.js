@@ -15,8 +15,10 @@ var orm = {
 		})
 	},
 	validPassword : function(password, curUser) {
-//		console.log(`${password} : ${curUser[0].password}`);
-		return (password === curUser[0].password);
+		if(curUser){
+			return (password === curUser[0].password);			
+		}
+		throw error;
 	},
 	getTrendingSymptoms : function(limit = 10, cbFunc){
 		let sql = "SELECT symptom_id, COUNT(symptom_id) AS count FROM symptoms" +
