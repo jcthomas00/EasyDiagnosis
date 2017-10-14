@@ -1,5 +1,4 @@
-<style type="text/css">*/
-@media only screen and (min-width: 500px) {*/
+/*<style type="text/css">*/
   .bg-container {
     position: absolute;
     top: 0;
@@ -59,7 +58,7 @@ main, footer{
 /*Chart*/
 @import "compass/css3";
 
-// Body Styles
+ /*Body Styles*/
 body { 
   font-family: "Helvetica Neue", arial, sans-serif;
   padding: 2em;
@@ -72,7 +71,7 @@ h1 {
 
 h3 { font-size: 2em; }
 
-// Progress Bars
+ /*Progress Bars*/
 progress, progress[role] {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -83,14 +82,14 @@ progress, progress[role] {
   width: 100%;
 }
 
-// The unordered list
+/*The unordered list*/
 .skill-list {
   list-style: none;
   margin: 0;
   padding: 1em;
 }
 
-// The list item
+ /*The list item*/
 .skill {
   margin-bottom: 1em;
   position: relative;
@@ -107,7 +106,7 @@ progress, progress[role] {
   }
 }
 
-// Style the bar colors
+ /*Style the bar colors*/
 .skill-1::-webkit-progress-value {
   background: #ff9e2c;
 }
@@ -132,7 +131,7 @@ progress, progress[role] {
   background: #ff6b6b;
 }
 
-// Animation Keyframes
+/*Animation Keyframes*/
 @-webkit-keyframes bar-fill {
   0% { width: 0; }
 }
@@ -141,5 +140,20 @@ progress, progress[role] {
   0% { width: 0; }
 }
 /*End of Chart*/
+/*@media only screen and (max-width: 1000px) {
+  navigation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    min-height: 100vh;
+    max-height: 100vh;
+    width: 20%;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
 }
-/*</style>
+  }*/
+/*</style>*/
