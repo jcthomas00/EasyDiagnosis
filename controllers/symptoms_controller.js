@@ -34,6 +34,7 @@ router.post('/register', function(req, res) {
 	}
 	diagnoser.addUser(userData, (newlyCreatedId)=>{
 		current_user_id = newlyCreatedId;
+		res.render('/login')
 	});
 });
 

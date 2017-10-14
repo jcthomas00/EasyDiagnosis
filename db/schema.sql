@@ -15,7 +15,7 @@ primary key (user_id)
 
 create table requests(
 request_id integer auto_increment not null,
-time integer Not Null,
+time bigint Not Null,
 fk_user_id integer,
 search_text varchar (255),
 primary key (request_id),
