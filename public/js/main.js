@@ -22,7 +22,7 @@ var sourceBuffer;
 var gumVideo = document.querySelector('video#gum');
 var recordedVideo = document.querySelector('video#recorded');
 
-var recordButton = document.querySelector('i#record');
+//var recordButton = document.querySelector('i#record');
 var recordText = document.querySelector('span#record-text');
 var playButton = document.querySelector('button#play');
 var downloadButton = document.querySelector('button#download');
