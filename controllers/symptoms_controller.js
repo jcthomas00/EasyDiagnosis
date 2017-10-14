@@ -34,7 +34,7 @@ router.post('/register', function(req, res) {
 	}
 	diagnoser.addUser(userData, (newlyCreatedId)=>{
 		current_user_id = newlyCreatedId;
-		res.render('/login')
+		res.render('login')
 	});
 });
 
@@ -71,6 +71,7 @@ router.post('/', function(req, res) {
 		reqData.request_id = response;
 	});
 	getSymptoms(req.body.spokenSymptoms, (body)=>{
+		console.log(body);
 		symps = JSON.parse(body).mentions;
 		if (symps.length > 0){
 			reqData.symptoms = symps;
