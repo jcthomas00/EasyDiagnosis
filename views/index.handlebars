@@ -3,13 +3,24 @@
   <div class="container">
     <div class="row">
       <div class="col s12 m12">
-		<h2 class="header center-on-small-only pink-text darken-4">Click this button:
-			<a class="btn btn-floating pink darken-4 btn-large pulse"><i class="material-icons">mic</i></a> 
+		<h2 class="header center-on-small-only pink-text darken-4"><span id="record-text">Click to start:</span>
+			<a class="btn btn-floating pink darken-4 btn-large pulse"><i class="material-icons" id="record">mic</i></a> 
 		</h2>
 		<h4 class="light red-text text-darken-4 center-on-small-only">
 			Just tell us your symptoms and we will provide you with information to get you feeling good again.
 		</h4>
 		<form action="/" method="POST">
+        <div class="input-field col s6">
+          <select name="gender">
+            <option value="1" selected>Male</option>
+            <option value="2">Female</option>
+          </select>
+          <label>Gender</label>
+        </div>
+        <div class="input-field col s6">
+          <label for="age">Age</label>
+          <input id="age" name="age" type="number" value="30" min="0" max="100" />
+        </div>
 		  <input type="text" class="grey-text" name="spokenSymptoms" placeholder="Enter your symptoms here" />
 		  <input type="submit" value="Get Diagnosis" class="btn" />
 		</form>
@@ -116,3 +127,46 @@
 </div><!-- container -->
 
 <a name="footer"></a>
+
+<!-- speech test -->
+
+  <title>MediaStream Recording</title>
+
+  <link rel="icon" sizes="192x192" href="../../../images/webrtc-icon-192x192.png">
+  <link href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="../../../css/main.css">
+  <link rel="stylesheet" href="css/main.css">
+
+</head>
+
+<body>
+
+  <div id="container">
+
+    <h1><a href="//webrtc.github.io/samples/" title="WebRTC samples homepage">WebRTC samples</a> <span>MediaRecorder</span></h1>
+
+    <p>This demo requires Firefox 29 or later, or Chrome 47 or later with <strong>Enable experimental Web Platform features</strong> enabled from chrome://flags.</p>
+
+    <p>For more information see the MediaStream Recording API <a href="http://w3c.github.io/mediacapture-record/MediaRecorder.html" title="W3C MediaStream Recording API Editor's Draft">Editor's&nbsp;Draft</a>.</p>
+
+    <video id="gum" autoplay muted></video>
+    <video id="recorded" autoplay loop></video>
+
+    <div>
+      <button id="record" disabled>Start Recording</button>
+      <button id="play" disabled>Play</button>
+      <button id="download" disabled>Download</button>
+    </div>
+
+    <a href="https://github.com/webrtc/samples/tree/gh-pages/src/content/getusermedia/record" title="View source for this page on GitHub" id="viewSource">View source on GitHub</a>
+
+  </div>
+
+  <!-- include adapter for srcObject shim -->
+  <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+  <script src="js/main.js"></script>
+  <script src="../../../js/lib/ga.js"></script>
+
+
+
+
