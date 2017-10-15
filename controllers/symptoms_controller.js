@@ -8,12 +8,14 @@ var express 		= require('express'),
 
 //show index page
 router.get('/', function(req, res) {
-	if (req.user) {
-		let userFemale = (req.user[0].gender === "female") ? true : false;
-		res.render('index', {userAge : req.user[0].age, userFemale : userFemale, loggedIn:true});
-	}else{
-		res.render('index');
-	}
+	diagnoser.getTrendingSymptoms((data)=>{
+		if (req.user) {
+			let userFemale = (req.user[0].gender === "female") ? true : false;
+			res.render('index', {userAge : req.user[0].age, userFemale : userFemale, loggedIn:true, trending:data});
+		}else{
+			res.render('index');
+		}
+	});
 });
 
 //show new user page
@@ -70,25 +72,67 @@ router.post("/login", passport.authenticate("local",
 
   // Here we've add our isAuthenticated middleware to this route.
   // If a user who is not logged in tries to access this route they will be redirected to the signup page
+  // router.get("/member", isAuthenticated, function(req, res) {
+  // 	if(req.user){
+  // 		diagnoser.getUserConditions(req.user[0].user_id, (data)=>{
+  // 			for (dataItem of data){
+  // 				diagnoser.getRequestSymptoms(dataItem.request_id, (response)=>{
+  // 					dataItem.symptoms = response;
+  // 				});
+  // 				dataItem.time = new Date(dataItem.time).toLocaleString('en-US')
+  // 			}
+  // 			if (data[0].request_id){
+		// 	    res.render("member", {loggedIn:true, diagnosis : data});
+  // 			} else {
+		// 	    res.render("member", {loggedIn:true});  				
+  // 			}
+  // 		});
+  // 	}else {
+	 //    res.render("member");
+  // 	}
+  // });
+
+  // trying promise root
+
   router.get("/member", isAuthenticated, function(req, res) {
   	if(req.user){
   		diagnoser.getUserConditions(req.user[0].user_id, (data)=>{
-  			for (dataItem of data){
-  				diagnoser.getRequestSymptoms(dataItem.request_id, (response)=>{
-  					dataItem.symptoms = response;
-  				});
-  				dataItem.time = new Date(dataItem.time).toLocaleString('en-US')
-  			}
-  			if (data[0].request_id){
-			    res.render("member", {loggedIn:true, diagnosis : data});
+  			putSymptoms(data).then((returnedData)=>{
+  			if (returnedData[0].request_id){
+			    res.render("member", {loggedIn:true, diagnosis : returnedData});
   			} else {
 			    res.render("member", {loggedIn:true});  				
   			}
+
+  			});
   		});
   	}else {
 	    res.render("member");
   	}
   });
+
+var putSymptoms = (userData)=>{
+	return new Promise((resolve, reject)=>{
+		recurFunc(userData.length-1, userData);
+
+		resolve(userData);
+	});
+}
+
+var recurFunc = (curVal, data)=>{
+		console.log(curVal)
+	if(curVal>0){
+		recurFunc(--curVal, data);
+	}
+			diagnoser.getRequestSymptoms(data[curVal].request_id, (response)=>{
+				data[curVal].symptoms = response;
+				data[curVal].time = new Date(data[curVal].time).toLocaleString('en-US')
+			});
+
+	
+}
+
+  //end trial
 
 //show dignosis based on entered text
 router.post('/', function(req, res) {

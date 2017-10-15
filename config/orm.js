@@ -44,8 +44,9 @@ var orm = {
 		throw error;
 	},
 	getTrendingSymptoms : function(limit = 10, cbFunc){
-		let sql = "SELECT symptom_id, COUNT(symptom_id) AS count FROM symptoms" +
-					" LEFT JOIN requests GROUP BY symptom_id ORDER BY time LIMIT 10"
+		let sql = "SELECT symptom_name, AVG(time) as avgtime, COUNT(symptom_id) "+
+			"AS Count FROM symptoms LEFT JOIN requests on symptoms.fk_request_id = "+
+			"requests.request_id GROUP BY symptom_name ORDER BY avgtime LIMIT 10";
 		connection.query(sql, cbFunc, (err, res)=>{
 			if (error){
 				console.log(error);

@@ -19,6 +19,11 @@ var diagnoser = {
 			cbFunc(res);
 		});
 	},
+	getTrendingSymptoms : function(cbFunc){
+		orm.getUserDiagnoses((res)=>{
+			cbFunc(res);
+		});
+	},
 	getUserConditions : function(userId, cbFunc){
 		orm.getUserDiagnoses(userId, (res)=>{
 			cbFunc(res);
