@@ -26,8 +26,9 @@
 							<p>
 								Diagnosis based on the following symptoms:
 								<ol>
-									<li>Headache</li>
-									<li>Lethargy</li>
+									{{#each this.symptoms}}
+										<li>{{symptom_name}}</li>
+									{{/each}}
 								</ol>
 							</p>
 						</div>

@@ -14,6 +14,11 @@ var diagnoser = {
 	deleteRequest : function(requestId){
 		orm.deleteRequest(requestId);
 	},
+	getRequestSymptoms : function(requestId, cbFunc){
+		orm.getRequestSymptoms(requestId, (res)=>{
+			cbFunc(res);
+		});
+	},
 	getUserConditions : function(userId, cbFunc){
 		orm.getUserDiagnoses(userId, (res)=>{
 			cbFunc(res);

@@ -7,6 +7,17 @@ var orm = {
 			cbFunc(res);
 		});
 	},
+	getRequestSymptoms : function(requestId, cbFunc){
+		let sql = "SELECT symptoms.symptom_name FROM requests LEFT JOIN symptoms " +
+			"ON requests.request_id = symptoms.fk_request_id WHERE requests.request_id = ?";
+		connection.query(sql, requestId, (err, res)=>{
+			if(err){
+				console.log(err)
+			}else{
+				cbFunc(res);				
+			}
+		});
+	},
 	getUser : function(username, cbFunc){
 		let sql = "SELECT * FROM users WHERE email = ? LIMIT 1";
 		connection.query(sql, username, (err, res)=>{

@@ -74,9 +74,11 @@ router.post("/login", passport.authenticate("local",
   	if(req.user){
   		diagnoser.getUserConditions(req.user[0].user_id, (data)=>{
   			for (dataItem of data){
+  				diagnoser.getRequestSymptoms(dataItem.request_id, (response)=>{
+  					dataItem.symptoms = response;
+  				});
   				dataItem.time = new Date(dataItem.time).toLocaleString('en-US')
   			}
-  	console.log(data[0].request_id);
   			if (data[0].request_id){
 			    res.render("member", {loggedIn:true, diagnosis : data});
   			} else {
