@@ -11,6 +11,14 @@ var diagnoser = {
 			cbFunc(res);
 		});
 	},
+	deleteRequest : function(requestId){
+		orm.deleteRequest(requestId);
+	},
+	getUserConditions : function(userId, cbFunc){
+		orm.getUserDiagnoses(userId, (res)=>{
+			cbFunc(res);
+		});
+	},
 	addSymptoms : function(userData){
 		orm.insertSymptoms(userData);
 	},

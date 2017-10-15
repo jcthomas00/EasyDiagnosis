@@ -9,7 +9,6 @@ var express 		= require('express'),
 //show index page
 router.get('/', function(req, res) {
 	if (req.user) {
-		console.log(req.user[0].age)
 		let userFemale = (req.user[0].gender === "female") ? true : false;
 		res.render('index', {userAge : req.user[0].age, userFemale : userFemale, loggedIn:true});
 	}else{
@@ -42,6 +41,11 @@ router.post('/register', function(req, res) {
 	});
 });
 
+router.post('/remove-request/:id', function(req, res){
+	diagnoser.deleteRequest(req.params.id);
+	res.redirect('/member');
+});
+
 //show login page
 router.get("/login", function(req, res) {
 	// If the user already has an account send them to the members page
@@ -55,7 +59,7 @@ router.get("/login", function(req, res) {
 //logout user
 router.get("/logout", function(req, res) {
     req.logout();
-    res.redirect("/");
+    res.redirect("/login");
 });
 
 //do login logic
@@ -67,7 +71,21 @@ router.post("/login", passport.authenticate("local",
   // Here we've add our isAuthenticated middleware to this route.
   // If a user who is not logged in tries to access this route they will be redirected to the signup page
   router.get("/member", isAuthenticated, function(req, res) {
-    res.render("member", {loggedIn:true});
+  	if(req.user){
+  		diagnoser.getUserConditions(req.user[0].user_id, (data)=>{
+  			for (dataItem of data){
+  				dataItem.time = new Date(dataItem.time).toLocaleString('en-US')
+  			}
+  	console.log(data[0].request_id);
+  			if (data[0].request_id){
+			    res.render("member", {loggedIn:true, diagnosis : data});
+  			} else {
+			    res.render("member", {loggedIn:true});  				
+  			}
+  		});
+  	}else {
+	    res.render("member");
+  	}
   });
 
 //show dignosis based on entered text
@@ -81,7 +99,6 @@ router.post('/', function(req, res) {
 		reqData.request_id = response;
 	});
 	getSymptoms(req.body.spokenSymptoms, (body)=>{
-		console.log(body);
 		symps = JSON.parse(body).mentions;
 		if (symps.length > 0){
 			reqData.symptoms = symps;
@@ -89,15 +106,26 @@ router.post('/', function(req, res) {
 			getDiagnosis(symps, req.body.gender, parseInt(req.body.age), (body)=>{
 					let firstDiagnosis = JSON.parse(body).conditions[0];
 					reqData.condition_id = firstDiagnosis.id;
+					reqData.common_name = firstDiagnosis.common_name;
 					diagnoser.addDiagnosis(reqData);			
-
-					res.render('index', {
-						probability: Math.round(firstDiagnosis.probability*100), 
-						diagnosis: firstDiagnosis.common_name
-					});	//res.render
+					if(req.user){
+						res.render('index', {
+							probability: Math.round(firstDiagnosis.probability*100), 
+							diagnosis: firstDiagnosis.common_name, loggedIn:true
+						});	//res.render
+					} else {
+						res.render('index', {
+							probability: Math.round(firstDiagnosis.probability*100), 
+							diagnosis: firstDiagnosis.common_name
+						});	//res.render						
+					}
 			});		//getDiagnosis
 		} else {
-			res.render('index', {noSymp : true});
+			if(req.user){
+				res.render('index', {noSymp : true});
+			} else {
+				res.render('index', {noSymp : true, loggedIn:true});				
+			}
 		}	
 	});			//getSymptoms
 });				//post

@@ -52,22 +52,34 @@
 					</icon>
 					<span class="text"><a href="/#footer">Connect With Us</a></span>
 				</li>
-				<li>
-					<icon class="material-icons">
-					   fingerprint
-					</icon>
-					{{#if loggedIn}}	
-						<span class="text"><a href="/logout">Logout</a></span>
-					{{else}}
+				{{#if loggedIn}}	
+					<li>
+						<icon class="material-icons">
+						   assignment_ind
+						</icon>
+							<span class="text"><a href="/member">Profile</a></span>
+					</li>
+					<li>
+						<icon class="material-icons">
+						   fingerprint
+						</icon>
+							<span class="text"><a href="/logout">Logout</a></span>
+					</li>
+				{{else}}
+					<li>
+						<icon class="material-icons">
+						   fingerprint
+						</icon>
 						<span class="text"><a href="/login">Login</a></span>
-					{{/if}}
-			</li>
+					</li>
+				{{/if}}
 	
 			</ul>
-	
-    <a href="#" data-activates="slide-out" class="button-collapse">
-    	<i class="material-icons text-pink darken-4">menu</i>
-    </a>
+	<div class="blue lighten-5">
+	    <a href="#" data-activates="slide-out" class="button-collapse ">
+	    	<i id="slide-menu-icon" class="material-icons text-pink darken-4">menu</i>
+	    </a>
+	</div>
 
     <main>
 
@@ -76,6 +88,7 @@
     </main>
          <footer class="page-footer">
           <div class="container">
+            <div class="row">
               <div class="col l6 s12">
                 <h5 class="white-text">Connect With Us</h5>
                 <p class="grey-text text-lighten-4">Contact us using the method you see fit.</p>
@@ -89,6 +102,7 @@
                   <li><a class="grey-text text-lighten-3" href="#!">GitHub</a></li>
                 </ul>
               </div>
+            </div>
           </div>
           <div class="footer-copyright">
             <div class="container">

@@ -2,8 +2,8 @@
     <form class="col s12" action="/register" method="post">
       <div class="row">
         <div class="input-field col s6">
-          <input placeholder="First Name" name="first_name" type="text" class="validate">
-          <label for="first_name">First Name</label>
+          <input placeholder="First Name" name="first_name" type="text" class="validate" required="true">
+          <label for="first_name" data-error="*required">First Name</label>
         </div>
         <div class="input-field col s6">
           <input name="last_name" type="text" class="validate">
@@ -12,22 +12,21 @@
       </div>
       <div class="row">
         <div class="input-field col s6">
-          <input value="age" name="age" type="number" class="validate">
-          <label for="disabled">Age</label>
+          <input value="age" name="age" type="number" class="validate" required="true" >
+          <label for="disabled" data-error="*required">Age</label>
         </div>
         <div class="input-field col s6">
-          <select name="gender">
-            <option value="" disabled selected>Select Your Gender</option>
-            <option value="male">Male</option>
+          <select name="gender" required>
+            <option value="male" selected>Male</option>
             <option value="female">Female</option>
           </select>
-          <label>Gender</label>
+          <label for="gender" data-error="*required">Gender</label>
         </div>
       </div>
       <div class="row">
         <div class="input-field col s12">
-          <input name="email" type="email" class="validate">
-          <label for="email">Email</label>
+          <input name="email" type="email" class="validate" required="true">
+          <label for="email" data-error="*invalid email">Email</label>
         </div>
        </div>
       <div class="row">
@@ -38,8 +37,8 @@
        </div>
        <div class="row">
         <div class="input-field col s12">
-          <input name="password" type="password" class="validate">
-          <label for="password">Password</label>
+          <input name="password" type="password" class="validate" required="true">
+          <label for="password" data-error="*required">Password</label>
         </div>
       </div>
       <div class="row">

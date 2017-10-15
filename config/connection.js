@@ -13,7 +13,6 @@ if (process.env.JAWSDB_URL){
 }
 
 connection.connect(function(err) {
-console.log("I'm here");
     if (err) {
         console.error('error connecting: ' + err.stack);
         return;

@@ -1,5 +1,9 @@
 /*<style type="text/css">*/
-body, p, input, div{
+body{
+padding: 0;
+line-height: 1;
+  } 
+  p, input, div{
   color: grey;
   }
   .bg-container {
@@ -43,9 +47,7 @@ ul.navigation-list li span.text a{
 }
 h6{
   font-weight: 700;
-  text-transform: uppercase;
   font-size: 1.5rem;
-  padding: 2rem 0;
 }
 .side-nav{
       display: flex;
@@ -53,9 +55,20 @@ h6{
     align-items: flex-start;
     justify-content: flex-start;
 }
-main, footer{
-  padding-left: 300px;
+
+#slide-menu-icon{
+  padding: 10px;  
 }
+.section{
+  padding-top: 0;
+}
+@media screen and (min-width: 990px){
+  main, footer{
+    padding-left: 300px;
+  }
+  
+}
+
 #index-banner{
   color: white;
 }
@@ -65,7 +78,6 @@ main, footer{
  /*Body Styles*/
 body { 
   font-family: "Helvetica Neue", arial, sans-serif;
-  padding: 2em;
 }
 
 h1 {

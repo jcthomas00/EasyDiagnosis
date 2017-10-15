@@ -4,7 +4,6 @@ var orm = {
 	getAllSymptoms : function(cbFunc){
 		let sql = "SELECT * FROM symptoms";
 		connection.query(sql, cbFunc, (err, res)=>{
-//			console.log(res);
 			cbFunc(res);
 		});
 	},
@@ -13,6 +12,19 @@ var orm = {
 		connection.query(sql, username, (err, res)=>{
 			cbFunc(res);
 		})
+	},
+	getUserDiagnoses : function(userId, cbFunc){
+		let sql = "SELECT diagnosis.condition_name, requests.time, requests.search_text," + 
+			"requests.request_id FROM users LEFT JOIN requests on users.user_id=" +
+			"requests.fk_user_id LEFT JOIN diagnosis ON requests.request_id= "+
+			"diagnosis.fk_request_id WHERE users.user_id = ? ORDER BY time DESC";
+		connection.query(sql, userId, (err, res)=>{
+			if(err){
+				console.log(err)
+			}else{
+				cbFunc(res);				
+			}
+		});
 	},
 	validPassword : function(password, curUser) {
 		if(curUser){
@@ -44,7 +56,6 @@ var orm = {
 		});
 	},
 	insertRequest : function (requestData, cbFunc){
-//		console.log(requestData.text + ", " + requestData.user_id);
 		let sql = "INSERT INTO requests (fk_user_id, search_text, time) VALUES (?, ?, ?)";
 		connection.query(sql, [requestData.user_id, requestData.text, Date.now()], (error, results, fields)=>{
 			if (error){
@@ -56,10 +67,20 @@ var orm = {
 			}
 		});		
 	},
+	deleteRequest : function (requestId){
+		console.log("requestID: "+requestId);
+		let sql = "DELETE FROM requests WHERE request_id = ?";
+		connection.query(sql, requestId, (error, results, fields)=>{
+			if (error){
+				console.log(error);
+				throw error;
+			}
+		});		
+	},
 	insertSymptoms : function (requestData){
-		let sql = "INSERT INTO symptoms (fk_request_id, sID) VALUES (?, ?)"
+		let sql = "INSERT INTO symptoms (fk_request_id, sID, symptom_name) VALUES (?, ?, ?)"
 		for (symptom of requestData.symptoms){
-			connection.query(sql, [requestData.request_id, symptom.id], (err, res)=>{
+			connection.query(sql, [requestData.request_id, symptom.id, symptom.common_name], (err, res)=>{
 				if(err){
 					console.log(err);
 					throw(err);
@@ -70,8 +91,8 @@ var orm = {
 		}
 	},
 	insertDiagnosis : function (requestData){
-		let sql = "INSERT INTO diagnosis (fk_request_id, condition_id) VALUES (?, ?)"
-		connection.query(sql, [requestData.request_id, requestData.condition_id], (err, res)=>{
+		let sql = "INSERT INTO diagnosis (fk_request_id, condition_id, condition_name) VALUES (?, ?, ?)"
+		connection.query(sql, [requestData.request_id, requestData.condition_id, requestData.common_name], (err, res)=>{
 			if(err){
 				console.log(err);
 				throw(err);
