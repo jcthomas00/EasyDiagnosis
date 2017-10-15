@@ -20,7 +20,7 @@ var diagnoser = {
 		});
 	},
 	getTrendingSymptoms : function(cbFunc){
-		orm.getUserDiagnoses((res)=>{
+		orm.getTrendingSymptoms((res)=>{
 			cbFunc(res);
 		});
 	},

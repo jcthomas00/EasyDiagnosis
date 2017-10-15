@@ -9,14 +9,71 @@ var express 		= require('express'),
 //show index page
 router.get('/', function(req, res) {
 	diagnoser.getTrendingSymptoms((data)=>{
+		var total = 0;
+		for(dataItem of data){
+			total += dataItem.count;
+		}
+		for(dataItem of data){
+			dataItem.count = (dataItem.count/total)*100;
+		}		
 		if (req.user) {
 			let userFemale = (req.user[0].gender === "female") ? true : false;
 			res.render('index', {userAge : req.user[0].age, userFemale : userFemale, loggedIn:true, trending:data});
 		}else{
-			res.render('index');
+			res.render('index', {trending:data});
 		}
 	});
 });
+
+
+//show dignosis based on entered text
+router.post('/', function(req, res) {
+	let symps 	= [], 
+		reqData	= {
+			user_id : (req.user ? req.user[0].user_id : 1), 
+			text 	: req.body.spokenSymptoms
+		};
+	diagnoser.addRequest(reqData, (response)=>{
+		reqData.request_id = response;
+	});
+	getSymptoms(req.body.spokenSymptoms, (body)=>{
+		symps = JSON.parse(body).mentions;
+		if (symps.length > 0){
+			reqData.symptoms = symps;
+			diagnoser.addSymptoms(reqData);			
+			getDiagnosis(symps, req.body.gender, parseInt(req.body.age), (body)=>{
+					let firstDiagnosis = JSON.parse(body).conditions[0];
+					reqData.condition_id = firstDiagnosis.id;
+					reqData.common_name = firstDiagnosis.common_name;
+					diagnoser.addDiagnosis(reqData);
+
+	diagnoser.getTrendingSymptoms((data)=>{
+		var total = 0;
+		for(dataItem of data){
+			total += dataItem.count;
+		}
+		for(dataItem of data){
+			dataItem.count = (dataItem.count/total)*100;
+		}		
+		if (req.user) {
+			let userFemale = (req.user[0].gender === "female") ? true : false;
+			res.render('index', {probability: Math.round(firstDiagnosis.probability*100), 
+							diagnosis: firstDiagnosis.common_name, loggedIn:true, trending:data});
+		}else{
+			res.render('index', {probability: Math.round(firstDiagnosis.probability*100), 
+							diagnosis: firstDiagnosis.common_name, trending:data});
+		}
+	});
+			});		//getDiagnosis
+		} else {
+			if(req.user){
+				res.render('index', {noSymp : true});
+			} else {
+				res.render('index', {noSymp : true, loggedIn:true});				
+			}
+		}	
+	});			//getSymptoms
+});				//post
 
 //show new user page
 router.get('/register', function(req, res) {
@@ -70,111 +127,25 @@ router.post("/login", passport.authenticate("local",
     res.render("member", {loggedIn:true});
 });
 
-  // Here we've add our isAuthenticated middleware to this route.
-  // If a user who is not logged in tries to access this route they will be redirected to the signup page
-  // router.get("/member", isAuthenticated, function(req, res) {
-  // 	if(req.user){
-  // 		diagnoser.getUserConditions(req.user[0].user_id, (data)=>{
-  // 			for (dataItem of data){
-  // 				diagnoser.getRequestSymptoms(dataItem.request_id, (response)=>{
-  // 					dataItem.symptoms = response;
-  // 				});
-  // 				dataItem.time = new Date(dataItem.time).toLocaleString('en-US')
-  // 			}
-  // 			if (data[0].request_id){
-		// 	    res.render("member", {loggedIn:true, diagnosis : data});
-  // 			} else {
-		// 	    res.render("member", {loggedIn:true});  				
-  // 			}
-  // 		});
-  // 	}else {
-	 //    res.render("member");
-  // 	}
-  // });
-
-  // trying promise root
-
+  //Here we've add our isAuthenticated middleware to this route.
+  //If a user who is not logged in tries to access this route they will be redirected to the signup page
   router.get("/member", isAuthenticated, function(req, res) {
   	if(req.user){
   		diagnoser.getUserConditions(req.user[0].user_id, (data)=>{
-  			putSymptoms(data).then((returnedData)=>{
-  			if (returnedData[0].request_id){
-			    res.render("member", {loggedIn:true, diagnosis : returnedData});
+  			for (dataItem of data){
+  				dataItem.time = new Date(dataItem.time).toLocaleString('en-US')
+  			}
+  			if (data[0].request_id){
+			    res.render("member", {loggedIn:true, diagnosis : data});
   			} else {
 			    res.render("member", {loggedIn:true});  				
   			}
-
-  			});
   		});
   	}else {
 	    res.render("member");
   	}
   });
 
-var putSymptoms = (userData)=>{
-	return new Promise((resolve, reject)=>{
-		recurFunc(userData.length-1, userData);
-
-		resolve(userData);
-	});
-}
-
-var recurFunc = (curVal, data)=>{
-		console.log(curVal)
-	if(curVal>0){
-		recurFunc(--curVal, data);
-	}
-			diagnoser.getRequestSymptoms(data[curVal].request_id, (response)=>{
-				data[curVal].symptoms = response;
-				data[curVal].time = new Date(data[curVal].time).toLocaleString('en-US')
-			});
-
-	
-}
-
-  //end trial
-
-//show dignosis based on entered text
-router.post('/', function(req, res) {
-	let symps 	= [], 
-		reqData	= {
-			user_id : (req.user ? req.user[0].user_id : 1), 
-			text 	: req.body.spokenSymptoms
-		};
-	diagnoser.addRequest(reqData, (response)=>{
-		reqData.request_id = response;
-	});
-	getSymptoms(req.body.spokenSymptoms, (body)=>{
-		symps = JSON.parse(body).mentions;
-		if (symps.length > 0){
-			reqData.symptoms = symps;
-			diagnoser.addSymptoms(reqData);			
-			getDiagnosis(symps, req.body.gender, parseInt(req.body.age), (body)=>{
-					let firstDiagnosis = JSON.parse(body).conditions[0];
-					reqData.condition_id = firstDiagnosis.id;
-					reqData.common_name = firstDiagnosis.common_name;
-					diagnoser.addDiagnosis(reqData);			
-					if(req.user){
-						res.render('index', {
-							probability: Math.round(firstDiagnosis.probability*100), 
-							diagnosis: firstDiagnosis.common_name, loggedIn:true
-						});	//res.render
-					} else {
-						res.render('index', {
-							probability: Math.round(firstDiagnosis.probability*100), 
-							diagnosis: firstDiagnosis.common_name
-						});	//res.render						
-					}
-			});		//getDiagnosis
-		} else {
-			if(req.user){
-				res.render('index', {noSymp : true});
-			} else {
-				res.render('index', {noSymp : true, loggedIn:true});				
-			}
-		}	
-	});			//getSymptoms
-});				//post
 
 //function to get diagnosis based on an array of symptoms
 var getDiagnosis = (symptoms, gender="male", old=30, cbFunc)=>{

@@ -43,15 +43,15 @@ var orm = {
 		}
 		throw error;
 	},
-	getTrendingSymptoms : function(limit = 10, cbFunc){
-		let sql = "SELECT symptom_name, AVG(time) as avgtime, COUNT(symptom_id) "+
-			"AS Count FROM symptoms LEFT JOIN requests on symptoms.fk_request_id = "+
-			"requests.request_id GROUP BY symptom_name ORDER BY avgtime LIMIT 10";
-		connection.query(sql, cbFunc, (err, res)=>{
+	getTrendingSymptoms : function(cbFunc){
+		let sql = "SELECT symptom_name as sName, AVG(time) as avgtime, COUNT(symptom_id) "+
+			"AS count FROM symptoms LEFT JOIN requests on symptoms.fk_request_id = "+
+			"requests.request_id GROUP BY symptom_name ORDER BY avgtime DESC LIMIT 5";
+		connection.query(sql, (error, res)=>{
 			if (error){
-				console.log(error);
 				throw error;
 			}
+			console.log(res);
 			cbFunc(res);
 		});
 	},

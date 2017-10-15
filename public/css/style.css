@@ -94,7 +94,7 @@ progress, progress[role] {
   appearance: none;
   border: none;
   background-size: auto;
-  height: 100px;
+  height: 30px;
   width: 100%;
 }
 
@@ -143,6 +143,12 @@ progress, progress[role] {
   background: #ff6b6b;
 }
 
+.skill-4::-webkit-progress-value {
+  background: #ff69aa;
+}
+.skill-5::-webkit-progress-value {
+  background: #69acff;
+}
 .skill-3::-moz-progress-bar {
   background: #ff6b6b;
 }
