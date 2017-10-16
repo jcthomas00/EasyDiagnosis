@@ -31,14 +31,14 @@
 		  <input id="analyze" type="submit" value="Get Diagnosis" class="btn" />
 		</form>
     {{#if noSymp}}
-      <p class="black-text">
+      <h5 class="black-text">
         Sorry, we didn't get that. Please try again.
-      </p>
+      </h5>
     {{/if}}
     {{#if probability}}
-			<p class="black-text">
-				Based on your input there is a {{ probability }} percent chance that you have {{ diagnosis }}
-			</p>
+			<h6 class="black-text">
+				Based on your input there is a {{ probability }}% chance that you have {{ diagnosis }}.
+			</h6>
 		{{/if}}
 
       </div>
