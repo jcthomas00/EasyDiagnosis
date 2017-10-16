@@ -51,7 +51,6 @@ var orm = {
 			if (error){
 				throw error;
 			}
-			console.log(res);
 			cbFunc(res);
 		});
 	},
