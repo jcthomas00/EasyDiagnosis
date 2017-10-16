@@ -8,7 +8,10 @@ var express 		= require('express'),
 
 //show index page
 router.get('/', function(req, res) {
+	get the top symptoms
 	diagnoser.getTrendingSymptoms((data)=>{
+
+		//convert search counts to percent
 		var total = 0;
 		for(dataItem of data){
 			total += dataItem.count;
@@ -16,6 +19,8 @@ router.get('/', function(req, res) {
 		for(dataItem of data){
 			dataItem.count = (dataItem.count/total)*100;
 		}		
+
+		//send the index page based on if the user is logged in
 		if (req.user) {
 			let userFemale = (req.user[0].gender === "female") ? true : false;
 			res.render('index', {userAge : req.user[0].age, userFemale : userFemale, loggedIn:true, trending:data});
@@ -33,21 +38,29 @@ router.post('/', function(req, res) {
 			user_id : (req.user ? req.user[0].user_id : 1), 
 			text 	: req.body.spokenSymptoms
 		};
+	//put user entry in our DB
 	diagnoser.addRequest(reqData, (response)=>{
 		reqData.request_id = response;
 	});
+
+	//parse user text into an array of symptoms
 	getSymptoms(req.body.spokenSymptoms, (body)=>{
 		symps = JSON.parse(body).mentions;
 		if (symps.length > 0){
 			reqData.symptoms = symps;
-			diagnoser.addSymptoms(reqData);			
+			//add the returned symptoms to our DB 
+			diagnoser.addSymptoms(reqData);		
+			//get diagnosis based on symptoms	
 			getDiagnosis(symps, req.body.gender, parseInt(req.body.age), (body)=>{
 					let firstDiagnosis = JSON.parse(body).conditions[0];
 					reqData.condition_id = firstDiagnosis.id;
 					reqData.common_name = firstDiagnosis.common_name;
+					//add the diagnosis to our DB
 					diagnoser.addDiagnosis(reqData);
 
+					//get the top symptoms
 					diagnoser.getTrendingSymptoms((data)=>{
+						//convert count to percentages
 						var total = 0;
 						for(dataItem of data){
 							total += dataItem.count;
@@ -55,6 +68,8 @@ router.post('/', function(req, res) {
 						for(dataItem of data){
 							dataItem.count = (dataItem.count/total)*100;
 						}		
+
+						//send the index page based on if the user is logged in						
 						if (req.user) {
 							let userFemale = (req.user[0].gender === "female") ? true : false;
 							res.render('index', {probability: Math.round(firstDiagnosis.probability*100), 
@@ -66,6 +81,7 @@ router.post('/', function(req, res) {
 					});
 			});		//getDiagnosis
 		} else {
+			//there are no symptoms
 			if(req.user){
 				res.render('index', {noSymp : true});
 			} else {
@@ -100,6 +116,7 @@ router.post('/register', function(req, res) {
 	});
 });
 
+//delete a given request
 router.post('/remove-request/:id', function(req, res){
 	diagnoser.deleteRequest(req.params.id);
 	res.redirect('/member');
@@ -198,5 +215,5 @@ var getSymptoms = (text, cbFunc)=>{
 	});
 }
 
-
+//package the controller for the server
 module.exports = router;

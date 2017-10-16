@@ -1,12 +1,16 @@
 var connection = require("./connection.js");
 
 var orm = {
+
+	//send back everything from the `symptom` table
 	getAllSymptoms : function(cbFunc){
 		let sql = "SELECT * FROM symptoms";
 		connection.query(sql, cbFunc, (err, res)=>{
 			cbFunc(res);
 		});
 	},
+
+	//send back symptoms that correspond to a given request
 	getRequestSymptoms : function(requestId, cbFunc){
 		let sql = "SELECT symptoms.symptom_name FROM requests LEFT JOIN symptoms " +
 			"ON requests.request_id = symptoms.fk_request_id WHERE requests.request_id = ?";
@@ -18,12 +22,16 @@ var orm = {
 			}
 		});
 	},
+
+	//get user information for the given username and send it to callback func. 
 	getUser : function(username, cbFunc){
 		let sql = "SELECT * FROM users WHERE email = ? LIMIT 1";
 		connection.query(sql, username, (err, res)=>{
 			cbFunc(res);
 		})
 	},
+
+	//get all of a given users' searches/requests and corresponding diagnosis 
 	getUserDiagnoses : function(userId, cbFunc){
 		let sql = "SELECT diagnosis.condition_name, requests.time, requests.search_text," + 
 			"requests.request_id FROM users LEFT JOIN requests on users.user_id=" +
@@ -37,12 +45,16 @@ var orm = {
 			}
 		});
 	},
+
+	//check if the password is correct
 	validPassword : function(password, curUser) {
 		if(curUser){
 			return (password === curUser[0].password);			
 		}
 		throw error;
 	},
+
+	//send back top 5 symptoms
 	getTrendingSymptoms : function(cbFunc){
 		let sql = "SELECT symptom_name as sName, AVG(time) as avgtime, COUNT(symptom_id) "+
 			"AS count FROM symptoms LEFT JOIN requests on symptoms.fk_request_id = "+
@@ -54,6 +66,8 @@ var orm = {
 			cbFunc(res);
 		});
 	},
+
+	//create a new user in the user table and send back the generated user_id
 	insertUser : function (userData, cbFunc){
 		let sql = "INSERT INTO users (name, phone, email, gender, age, password)" +
 					"VALUES (?, ?, ?, ?, ?, ?)"
@@ -66,6 +80,8 @@ var orm = {
 				cbFunc(results.insertId);
 		});
 	},
+
+	//create a new request and send back the generated request_id
 	insertRequest : function (requestData, cbFunc){
 		let sql = "INSERT INTO requests (fk_user_id, search_text, time) VALUES (?, ?, ?)";
 		connection.query(sql, [requestData.user_id, requestData.text, Date.now()], (error, results, fields)=>{
@@ -78,8 +94,9 @@ var orm = {
 			}
 		});		
 	},
+
+	//delete the given request
 	deleteRequest : function (requestId){
-		console.log("requestID: "+requestId);
 		let sql = "DELETE FROM requests WHERE request_id = ?";
 		connection.query(sql, requestId, (error, results, fields)=>{
 			if (error){
@@ -88,6 +105,8 @@ var orm = {
 			}
 		});		
 	},
+
+	//create a new symptom
 	insertSymptoms : function (requestData){
 		let sql = "INSERT INTO symptoms (fk_request_id, sID, symptom_name) VALUES (?, ?, ?)"
 		for (symptom of requestData.symptoms){
@@ -95,23 +114,22 @@ var orm = {
 				if(err){
 					console.log(err);
 					throw(err);
-				}else{
-//					console.log(`Iserted ${symptom} into symptoms`);
 				}
 			});
 		}
 	},
+
+	//create a new diagnosis
 	insertDiagnosis : function (requestData){
 		let sql = "INSERT INTO diagnosis (fk_request_id, condition_id, condition_name) VALUES (?, ?, ?)"
 		connection.query(sql, [requestData.request_id, requestData.condition_id, requestData.common_name], (err, res)=>{
 			if(err){
 				console.log(err);
 				throw(err);
-			}else{
-//				console.log(`Iserted ${requestData.condition_id} into diagnosis`);
 			}
 		});
 	}
 };
 
+//package this file for consumption my the model
 module.exports = orm;

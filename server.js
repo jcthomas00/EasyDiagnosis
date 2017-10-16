@@ -6,6 +6,7 @@ var express 		= require("express"),
 	session 		= require("express-session"),
 	passport 		= require("./config/passport");
 
+//load .env file if not on heroku
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
 }

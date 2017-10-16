@@ -36,4 +36,6 @@ var diagnoser = {
 		orm.insertDiagnosis(userData);
 	}
 }
+
+//package this as a bridge between the orm and controller
 module.exports = diagnoser;
