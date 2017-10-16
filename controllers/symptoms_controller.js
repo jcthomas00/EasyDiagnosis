@@ -47,23 +47,23 @@ router.post('/', function(req, res) {
 					reqData.common_name = firstDiagnosis.common_name;
 					diagnoser.addDiagnosis(reqData);
 
-	diagnoser.getTrendingSymptoms((data)=>{
-		var total = 0;
-		for(dataItem of data){
-			total += dataItem.count;
-		}
-		for(dataItem of data){
-			dataItem.count = (dataItem.count/total)*100;
-		}		
-		if (req.user) {
-			let userFemale = (req.user[0].gender === "female") ? true : false;
-			res.render('index', {probability: Math.round(firstDiagnosis.probability*100), 
-							diagnosis: firstDiagnosis.common_name, loggedIn:true, trending:data});
-		}else{
-			res.render('index', {probability: Math.round(firstDiagnosis.probability*100), 
-							diagnosis: firstDiagnosis.common_name, trending:data});
-		}
-	});
+					diagnoser.getTrendingSymptoms((data)=>{
+						var total = 0;
+						for(dataItem of data){
+							total += dataItem.count;
+						}
+						for(dataItem of data){
+							dataItem.count = (dataItem.count/total)*100;
+						}		
+						if (req.user) {
+							let userFemale = (req.user[0].gender === "female") ? true : false;
+							res.render('index', {probability: Math.round(firstDiagnosis.probability*100), 
+											diagnosis: firstDiagnosis.common_name, loggedIn:true, trending:data});
+						}else{
+							res.render('index', {probability: Math.round(firstDiagnosis.probability*100), 
+											diagnosis: firstDiagnosis.common_name, trending:data});
+						}
+					});
 			});		//getDiagnosis
 		} else {
 			if(req.user){

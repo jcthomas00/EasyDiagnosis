@@ -46,7 +46,7 @@ var orm = {
 	getTrendingSymptoms : function(cbFunc){
 		let sql = "SELECT symptom_name as sName, AVG(time) as avgtime, COUNT(symptom_id) "+
 			"AS count FROM symptoms LEFT JOIN requests on symptoms.fk_request_id = "+
-			"requests.request_id GROUP BY symptom_name ORDER BY avgtime DESC LIMIT 5";
+			"requests.request_id GROUP BY symptom_name ORDER BY count DESC LIMIT 5";
 		connection.query(sql, (error, res)=>{
 			if (error){
 				throw error;
