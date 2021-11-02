@@ -8,7 +8,7 @@ var express 		= require('express'),
 
 //show index page
 router.get('/', function(req, res) {
-	get the top symptoms
+	//get the top symptoms
 	diagnoser.getTrendingSymptoms((data)=>{
 
 		//convert search counts to percent
